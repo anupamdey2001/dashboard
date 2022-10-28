@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <main>
+        <div class="chart">
+            <div class="chart1">
+                <canvas id="chart11" height="600" width="700"></canvas>
+            </div>
+        </div>
+        <div class="chart">
+            <div class="chart1">
+                <canvas id="chart12" height="600" width="700"></canvas>
+            </div>
+        </div>
+        <div class="chart">
+            <div class="chart1">
+                <canvas id="chart13" height="600" width="700"></canvas>
+            </div>
+        </div>
+    </main>
+
+
+
+    <script>
+        const xLabels = [];
+        const yTemps = [];
+        const yTemps2 = [];
+        chartIt();
+        Chart.defaults.font.size = 10;
+        async function chartIt() {
+            await getData();
+            const ctx1 = document.getElementById('chart11').getContext('2d');
+            const ctx2 = document.getElementById('chart12').getContext('2d');
+            const ctx3 = document.getElementById('chart13').getContext('2d');
+            const myChart1 = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: xLabels,
+                    datasets: [{
+                            label: 'Whole Water Temperature',
+                            data: yTemps,
+                            backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+                            borderColor: ['rgba(255, 99, 132, 1)'],
+                            fill: false,
+                            tension: .25,
+                            borderWidth: 1,
+                            pointRadius: 1
+                        },
+                        {
+                            label: 'North Water Temperature',
+                            data: yTemps2,
+                            backgroundColor: ['rgba(0, 255, 255, 0.2)'],
+                            borderColor: ['rgba(0, 255, 255, 1)'],
+                            fill: false,
+                            tension: .25,
+                            borderWidth: 1,
+                            pointRadius: 1
+                        }
+                    ]
+                }
+                // options: {
+                //     scales: {
+                //         y: {
+                //             ticks: {
+                //                 callback: function (value, index, ticks) {
+                //                     return value + '°';
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+            });
+            const myChart2 = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: xLabels,
+                    datasets: [{
+                        label: 'Whole Water Temperature',
+                        data: yTemps,
+                        backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+                        borderColor: ['rgba(255, 99, 132, 1)'],
+                        fill: false,
+                        tension: .25,
+                        borderWidth: 1,
+                        pointRadius: 1
+                    }, {
+                        label: 'North Water Temperature',
+                        data: yTemps2,
+                        backgroundColor: ['rgba(0, 255, 255, 0.2)'],
+                        borderColor: ['rgba(0, 255, 255, 1)'],
+                        fill: false,
+                        tension: .25,
+                        borderWidth: 1,
+                        pointRadius: 1
+                    }]
+                }
+            });
+            const myChart3 = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: xLabels,
+                    datasets: [{
+                        label: 'Whole Water Temperature',
+                        data: yTemps,
+                        backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+                        borderColor: ['rgba(255, 99, 132, 1)'],
+                        fill: false,
+                        tension: .25,
+                        borderWidth: 1,
+                        pointRadius: 1
+                    }, {
+                        label: 'North Water Temperature',
+                        data: yTemps2,
+                        backgroundColor: ['rgba(0, 255, 255, 0.2)'],
+                        borderColor: ['rgba(0, 255, 255, 1)'],
+                        fill: false,
+                        tension: .25,
+                        borderWidth: 1,
+                        pointRadius: 1
+                    }]
+                }
+            });
+        }
+
+
+        async function getData() {
+            const response = await fetch('test.csv');
+            const data = await response.text();
+            const table = await data.split('\n').slice(1);
+            table.forEach(row => {
+                const columns = row.split(',');
+                const year = columns[0];
+                xLabels.push(year);
+                const temp = columns[1];
+                yTemps.push(parseFloat(temp));
+                const temp2 = columns[2];
+                yTemps2.push(parseFloat(temp2));
+                // console.log(year, temp);
+            });
+        }
+    </script>
+</body>
+
+</html>
